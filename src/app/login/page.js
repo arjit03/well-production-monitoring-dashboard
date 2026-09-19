@@ -18,21 +18,21 @@ import {
 const demoUsers = [
   {
     id: 1,
-    name: "Admin User",
+    name: "Admin-1",
     email: "admin@example.com",
     password: "admin123",
     role: "admin",
   },
   {
     id: 2,
-    name: "Analyst User",
+    name: "Analyst-1",
     email: "analyst@example.com",
     password: "analyst123",
     role: "analyst",
   },
   {
     id: 3,
-    name: "Viewer User",
+    name: "Viewer-1",
     email: "viewer@example.com",
     password: "viewer123",
     role: "viewer",
@@ -41,12 +41,15 @@ const demoUsers = [
 
 export default function LoginPage() {
   const router = useRouter();
-  const { currentUser, loading } = useAuth();
+
+  const { currentUser, loading, setCurrentUser } = useAuth();
+
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
   });
+
   const [credentialsError, setCredentialsError] = useState({
     emailError: "",
     passwordError: "",
@@ -119,15 +122,15 @@ export default function LoginPage() {
       return;
     }
 
-    const currentUser = {
+    const loggedInUser = {
       id: user.id,
       name: user.name,
       email: user.email,
       role: user.role,
     };
 
-    localStorage.setItem("currentUser", JSON.stringify(currentUser));
-
+    localStorage.setItem("currentUser", JSON.stringify(loggedInUser));
+    setCurrentUser(loggedInUser);
     router.replace("/dashboard");
   }
 
@@ -140,7 +143,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex gap-2 min-h-screen flex-col items-center justify-center bg-muted/40 px-4 py-8 sm:px-6">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-8 sm:px-6">
       <h1 className="mb-8 text-center text-3xl font-bold sm:text-4xl lg:text-5xl">
         Well Production Monitor
       </h1>
