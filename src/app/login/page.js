@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
+import { Spinner } from "@/components/ui/spinner";
+import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -40,6 +41,7 @@ const demoUsers = [
 
 export default function LoginPage() {
   const router = useRouter();
+  const { currentUser, loading } = useAuth();
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const [credentials, setCredentials] = useState({
     email: "",
@@ -49,9 +51,13 @@ export default function LoginPage() {
     emailError: "",
     passwordError: "",
   });
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!loading && currentUser) {
+      router.replace("/dashboard");
+    }
+  }, [loading, currentUser, router]);
 
   function handleCredentials(e) {
     if (e.target.name === "email") {
@@ -63,6 +69,7 @@ export default function LoginPage() {
         return { ...prev, passwordError: "" };
       });
     }
+
     setCredentials((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
     });
@@ -100,6 +107,7 @@ export default function LoginPage() {
         emailError: "Please enter a valid email address",
       }));
     }
+
     const user = demoUsers.find(
       (user) =>
         user.email === credentials.email &&
@@ -111,14 +119,29 @@ export default function LoginPage() {
       return;
     }
 
-    localStorage.setItem("currentUser", JSON.stringify(user));
+    const currentUser = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    };
+
+    localStorage.setItem("currentUser", JSON.stringify(currentUser));
 
     router.replace("/dashboard");
   }
 
+  if (loading || currentUser) {
+    return (
+      <main className="flex min-h-screen items-center justify-center">
+        <Spinner className="size-6" />
+      </main>
+    );
+  }
+
   return (
     <main className="flex gap-2 min-h-screen flex-col items-center justify-center bg-muted/40 px-4 py-8 sm:px-6">
-      <h1 className="mb-8  text-center text-3xl font-bold sm:text-4xl lg:text-5xl">
+      <h1 className="mb-8 text-center text-3xl font-bold sm:text-4xl lg:text-5xl">
         Well Production Monitor
       </h1>
 
@@ -134,12 +157,14 @@ export default function LoginPage() {
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-6">
             {error && <p className="text-sm text-destructive">{error}</p>}
+
             <div className="space-y-2">
               {credentialsError.emailError && (
                 <p className="text-sm text-destructive">
                   {credentialsError.emailError}
                 </p>
               )}
+
               <Label htmlFor="email">Email</Label>
 
               <Input
@@ -158,6 +183,7 @@ export default function LoginPage() {
                   {credentialsError.passwordError}
                 </p>
               )}
+
               <Label htmlFor="password">Password</Label>
 
               <Input
