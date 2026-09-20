@@ -158,11 +158,16 @@ export function getFieldProduction(rows = parseRows()) {
   return Object.values(byField).sort((a, b) => b.production - a.production);
 }
 
-// Calculate production performance for every well.
+// Calculate latest-date production performance for every well.
 export function getWellPerformance(rows = parseRows()) {
+  const latestDate = getLatestDate(rows);
+
+  // Only use records from the latest available date.
+  const latestRows = rows.filter((row) => row.timestamp === latestDate);
+
   const byWell = {};
 
-  for (const row of rows) {
+  for (const row of latestRows) {
     if (!byWell[row.wellName]) {
       byWell[row.wellName] = {
         wellName: row.wellName,
@@ -187,15 +192,9 @@ export function getWellPerformance(rows = parseRows()) {
   return Object.values(byWell)
     .map((well) => ({
       ...well,
-
       achievement:
         well.target > 0 ? (well.production / well.target) * 100 : null,
     }))
-    .sort((a, b) => {
-      // Wells without a valid target go to the bottom.
-      if (a.achievement === null) return 1;
-      if (b.achievement === null) return -1;
-
-      return b.achievement - a.achievement;
-    });
+    .filter((well) => well.achievement !== null)
+    .sort((a, b) => b.achievement - a.achievement);
 }

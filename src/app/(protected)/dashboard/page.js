@@ -1,9 +1,11 @@
 import StatCard from "@/components/StatCard";
+import WellPerformance from "@/components/WellPerformance";
 import ProductionTrendChart from "@/components/ProductionTrendChart";
 import {
   getDashboardMetrics,
   getProductionTrend,
   getFieldProduction,
+  getWellPerformance,
 } from "@/lib/production";
 import FieldProductionChart from "@/components/FieldProductionChart";
 
@@ -18,6 +20,7 @@ export default function DashboardPage() {
   const metrics = getDashboardMetrics();
   const trend = getProductionTrend();
   const fieldProduction = getFieldProduction();
+  const wellPerformance = getWellPerformance();
 
   const stats = [
     {
@@ -63,6 +66,9 @@ export default function DashboardPage() {
       </div>
       <div className="mt-6 min-w-0 overflow-hidden rounded-lg border bg-card p-4">
         <FieldProductionChart data={fieldProduction} />
+      </div>
+      <div className="mt-6 mb-2">
+        <WellPerformance data={wellPerformance} />
       </div>
     </>
   );

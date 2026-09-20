@@ -116,7 +116,9 @@ export default function FieldProductionChart({ data }) {
       )}
 
       <div className="mb-4 text-center">
-        <h3 className="text-lg font-semibold sm:text-xl">Actual vs Target</h3>
+        <h3 className="text-lg font-semibold sm:text-xl">
+          Production vs Target
+        </h3>
 
         <p className="text-md text-muted-foreground sm:text-lg">By Field</p>
       </div>
