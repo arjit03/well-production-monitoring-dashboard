@@ -22,7 +22,7 @@ function toNumber(value) {
 }
 
 // Read and format the CSV data.
-function parseRows() {
+export function parseRows() {
   const csv = fs.readFileSync(csvPath, "utf8");
 
   const { data } = Papa.parse(csv, {
@@ -197,4 +197,35 @@ export function getWellPerformance(rows = parseRows()) {
     }))
     .filter((well) => well.achievement !== null)
     .sort((a, b) => b.achievement - a.achievement);
+}
+// Get production and target trends over time for a specific field.
+export function getFieldProductionTrend(fieldName, rows = parseRows()) {
+  const byDate = {};
+
+  for (const row of rows) {
+    if (row.fieldName !== fieldName) {
+      continue;
+    }
+
+    if (!byDate[row.timestamp]) {
+      byDate[row.timestamp] = {
+        timestamp: row.timestamp,
+        production: 0,
+        target: 0,
+      };
+    }
+
+    if (row.production1D !== null) {
+      byDate[row.timestamp].production += row.production1D;
+    }
+
+    // Only positive targets are used.
+    if (row.productionTarget > 0) {
+      byDate[row.timestamp].target += row.productionTarget;
+    }
+  }
+
+  return Object.values(byDate).sort(
+    (a, b) => new Date(a.timestamp) - new Date(b.timestamp),
+  );
 }

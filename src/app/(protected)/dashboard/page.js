@@ -1,13 +1,15 @@
 import StatCard from "@/components/StatCard";
 import WellPerformance from "@/components/WellPerformance";
-import ProductionTrendChart from "@/components/ProductionTrendChart";
+import FieldProductionTrend from "@/components/FieldProductionTrend";
+import FieldProductionChart from "@/components/FieldProductionChart";
+
 import {
   getDashboardMetrics,
-  getProductionTrend,
   getFieldProduction,
+  getFieldProductionTrend,
   getWellPerformance,
+  parseRows,
 } from "@/lib/production";
-import FieldProductionChart from "@/components/FieldProductionChart";
 
 function formatCycleTime(seconds) {
   const hours = Math.floor(seconds / 3600);
@@ -17,10 +19,19 @@ function formatCycleTime(seconds) {
 }
 
 export default function DashboardPage() {
-  const metrics = getDashboardMetrics();
-  const trend = getProductionTrend();
-  const fieldProduction = getFieldProduction();
-  const wellPerformance = getWellPerformance();
+  const rows = parseRows();
+
+  const metrics = getDashboardMetrics(rows);
+  const fieldProduction = getFieldProduction(rows);
+  const wellPerformance = getWellPerformance(rows);
+
+  const fields = [...new Set(rows.map((row) => row.fieldName))].sort((a, b) =>
+    a.localeCompare(b, undefined, { numeric: true }),
+  );
+
+  const fieldTrends = Object.fromEntries(
+    fields.map((field) => [field, getFieldProductionTrend(field, rows)]),
+  );
 
   const stats = [
     {
@@ -48,7 +59,7 @@ export default function DashboardPage() {
   return (
     <>
       <div className="mb-6">
-        <h2 className=" text-xl sm:text-2xl font-bold">Dashboard</h2>
+        <h2 className="text-xl font-bold sm:text-2xl">Dashboard</h2>
 
         <p className="text-sm text-muted-foreground sm:text-base">
           Monitor well production and performance.
@@ -61,12 +72,12 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      <div className="mt-6 min-w-0 overflow-hidden rounded-lg border bg-card p-4">
-        <ProductionTrendChart data={trend} />
-      </div>
+      <FieldProductionTrend fields={fields} trends={fieldTrends} />
+
       <div className="mt-6 min-w-0 overflow-hidden rounded-lg border bg-card p-4">
         <FieldProductionChart data={fieldProduction} />
       </div>
+
       <div className="mt-6 mb-2">
         <WellPerformance data={wellPerformance} />
       </div>
