@@ -125,11 +125,16 @@ export function getProductionTrend(rows = parseRows()) {
   );
 }
 
-// Get production and target totals for each field.
+// Only use records from the latest available date.
 export function getFieldProduction(rows = parseRows()) {
+  const latestDate = getLatestDate(rows);
+
+  // Only use records from the latest available date.
+  const latestRows = rows.filter((row) => row.timestamp === latestDate);
+
   const byField = {};
 
-  for (const row of rows) {
+  for (const row of latestRows) {
     if (!byField[row.fieldName]) {
       byField[row.fieldName] = {
         fieldName: row.fieldName,

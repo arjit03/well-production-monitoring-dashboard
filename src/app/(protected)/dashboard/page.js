@@ -1,6 +1,11 @@
 import StatCard from "@/components/StatCard";
 import ProductionTrendChart from "@/components/ProductionTrendChart";
-import { getDashboardMetrics, getProductionTrend } from "@/lib/production";
+import {
+  getDashboardMetrics,
+  getProductionTrend,
+  getFieldProduction,
+} from "@/lib/production";
+import FieldProductionChart from "@/components/FieldProductionChart";
 
 function formatCycleTime(seconds) {
   const hours = Math.floor(seconds / 3600);
@@ -12,6 +17,7 @@ function formatCycleTime(seconds) {
 export default function DashboardPage() {
   const metrics = getDashboardMetrics();
   const trend = getProductionTrend();
+  const fieldProduction = getFieldProduction();
 
   const stats = [
     {
@@ -54,6 +60,9 @@ export default function DashboardPage() {
 
       <div className="mt-6 min-w-0 overflow-hidden rounded-lg border bg-card p-4">
         <ProductionTrendChart data={trend} />
+      </div>
+      <div className="mt-6 min-w-0 overflow-hidden rounded-lg border bg-card p-4">
+        <FieldProductionChart data={fieldProduction} />
       </div>
     </>
   );

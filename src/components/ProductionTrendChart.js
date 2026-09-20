@@ -108,6 +108,11 @@ export default function ProductionTrendChart({ data }) {
             color: "#ffffff",
           },
         },
+        splitLine: {
+          lineStyle: {
+            color: "#3f3f46",
+          },
+        },
       },
 
       series: [
@@ -161,7 +166,7 @@ export default function ProductionTrendChart({ data }) {
     const desktopOptions = {
       grid: {
         left: 60,
-        right: 60,
+        right: 10,
         top: 20,
         bottom: 100,
       },
