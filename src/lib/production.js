@@ -46,14 +46,32 @@ export function getProductionData() {
   return parseRows();
 }
 
+// Get the latest date in the dataset.
+function getLatestDate(rows) {
+  return rows.reduce((latest, row) => {
+    if (!latest || new Date(row.timestamp) > new Date(latest)) {
+      return row.timestamp;
+    }
+
+    return latest;
+  }, null);
+}
+
 // Get the main dashboard numbers.
 export function getDashboardMetrics(rows = parseRows()) {
-  const validProduction = rows.filter((row) => row.production1D !== null);
+  const latestDate = getLatestDate(rows);
+
+  // Only use records from the latest available date.
+  const latestRows = rows.filter((row) => row.timestamp === latestDate);
+
+  const validProduction = latestRows.filter((row) => row.production1D !== null);
 
   // Only positive targets are considered valid.
-  const validTargets = rows.filter((row) => row.productionTarget > 0);
+  const validTargets = latestRows.filter((row) => row.productionTarget > 0);
 
-  const validCycleTimes = rows.filter((row) => row.averageCycleTime !== null);
+  const validCycleTimes = latestRows.filter(
+    (row) => row.averageCycleTime !== null,
+  );
 
   return {
     totalProduction: validProduction.reduce(
@@ -67,7 +85,7 @@ export function getDashboardMetrics(rows = parseRows()) {
     ),
 
     // Count unique well names.
-    totalWells: new Set(rows.map((row) => row.wellName)).size,
+    totalWells: new Set(latestRows.map((row) => row.wellName)).size,
 
     averageCycleTime:
       validCycleTimes.length > 0

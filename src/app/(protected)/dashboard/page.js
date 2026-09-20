@@ -1,17 +1,30 @@
 import StatCard from "@/components/StatCard";
-import { getDashboardMetrics } from "@/lib/production";
+import ProductionTrendChart from "@/components/ProductionTrendChart";
+import { getDashboardMetrics, getProductionTrend } from "@/lib/production";
+
+function formatCycleTime(seconds) {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+
+  return `${hours}h ${minutes}m`;
+}
 
 export default function DashboardPage() {
   const metrics = getDashboardMetrics();
+  const trend = getProductionTrend();
 
   const stats = [
     {
       title: "Total Production",
-      value: metrics.totalProduction.toFixed(2),
+      value: `${metrics.totalProduction.toLocaleString(undefined, {
+        maximumFractionDigits: 2,
+      })} m³/d`,
     },
     {
       title: "Production Target",
-      value: metrics.totalTarget.toFixed(2),
+      value: `${metrics.totalTarget.toLocaleString(undefined, {
+        maximumFractionDigits: 2,
+      })} m³/d`,
     },
     {
       title: "Total Wells",
@@ -19,16 +32,16 @@ export default function DashboardPage() {
     },
     {
       title: "Avg Cycle Time",
-      value: `${metrics.averageCycleTime.toFixed(2)} sec`,
+      value: formatCycleTime(metrics.averageCycleTime),
     },
   ];
 
   return (
     <>
       <div className="mb-6">
-        <h2 className="text-2xl font-bold">Dashboard</h2>
+        <h2 className=" text-xl sm:text-2xl font-bold">Dashboard</h2>
 
-        <p className="text-muted-foreground">
+        <p className="text-sm text-muted-foreground sm:text-base">
           Monitor well production and performance.
         </p>
       </div>
@@ -37,6 +50,10 @@ export default function DashboardPage() {
         {stats.map((stat) => (
           <StatCard key={stat.title} title={stat.title} value={stat.value} />
         ))}
+      </div>
+
+      <div className="mt-6 min-w-0 overflow-hidden rounded-lg border bg-card p-4">
+        <ProductionTrendChart data={trend} />
       </div>
     </>
   );

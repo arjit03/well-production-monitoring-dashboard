@@ -39,17 +39,22 @@ export default function Sidebar() {
     <SidebarPrimitive>
       <SidebarHeader>
         <div className="px-2 py-2">
-          <p className="font-semibold">Production Monitor</p>
+          <p className="font-semibold text-base sm:text-lg">
+            Production Monitor
+          </p>
         </div>
       </SidebarHeader>
 
-      <SidebarContent className="py-6">
+      <SidebarContent className="py-4">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               {visibleItems.map((item) => (
                 <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton asChild isActive={pathname === item.href}>
+                  <SidebarMenuButton
+                    className="text-sm sm:text-base"
+                    isActive={pathname === item.href}
+                  >
                     <Link href={item.href}>{item.label}</Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

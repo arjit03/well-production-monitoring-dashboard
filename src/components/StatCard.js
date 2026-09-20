@@ -10,7 +10,9 @@ export default function StatCard({ title, value = "—" }) {
       </CardHeader>
 
       <CardContent>
-        <p className="text-2xl font-bold">{value}</p>
+        <p className="text-lg font-bold whitespace-nowrap sm:text-xl">
+          {value}
+        </p>
       </CardContent>
     </Card>
   );
