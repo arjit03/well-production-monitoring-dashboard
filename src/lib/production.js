@@ -1,0 +1,178 @@
+import fs from "fs";
+import path from "path";
+import Papa from "papaparse";
+
+const csvPath = path.join(
+  process.cwd(),
+  "src",
+  "data",
+  "frontend_sample_data.csv",
+);
+
+// Convert CSV values to numbers.
+// Missing or invalid values become null.
+function toNumber(value) {
+  if (value === null || value === undefined || value === "") {
+    return null;
+  }
+
+  const number = Number(value);
+
+  return Number.isFinite(number) ? number : null;
+}
+
+// Read and format the CSV data.
+function parseRows() {
+  const csv = fs.readFileSync(csvPath, "utf8");
+
+  const { data } = Papa.parse(csv, {
+    header: true,
+    skipEmptyLines: true,
+  });
+
+  return data.map((row) => ({
+    wellName: row["Well Name"],
+    fieldName: row["Field Name"],
+    timestamp: row["Timestamp"],
+    production1D: toNumber(row["Production_1D"]),
+    production7D: toNumber(row["Production_7D"]),
+    productionTarget: toNumber(row["Production Target"]),
+    averageCycleTime: toNumber(row["Average Cycle Time"]),
+  }));
+}
+
+// Get all production records.
+export function getProductionData() {
+  return parseRows();
+}
+
+// Get the main dashboard numbers.
+export function getDashboardMetrics(rows = parseRows()) {
+  const validProduction = rows.filter((row) => row.production1D !== null);
+
+  // Only positive targets are considered valid.
+  const validTargets = rows.filter((row) => row.productionTarget > 0);
+
+  const validCycleTimes = rows.filter((row) => row.averageCycleTime !== null);
+
+  return {
+    totalProduction: validProduction.reduce(
+      (sum, row) => sum + row.production1D,
+      0,
+    ),
+
+    totalTarget: validTargets.reduce(
+      (sum, row) => sum + row.productionTarget,
+      0,
+    ),
+
+    // Count unique well names.
+    totalWells: new Set(rows.map((row) => row.wellName)).size,
+
+    averageCycleTime:
+      validCycleTimes.length > 0
+        ? validCycleTimes.reduce((sum, row) => sum + row.averageCycleTime, 0) /
+          validCycleTimes.length
+        : 0,
+  };
+}
+
+// Get production and target totals for each date.
+export function getProductionTrend(rows = parseRows()) {
+  const byDate = {};
+
+  for (const row of rows) {
+    if (!byDate[row.timestamp]) {
+      byDate[row.timestamp] = {
+        timestamp: row.timestamp,
+        production: 0,
+        target: 0,
+      };
+    }
+
+    const date = byDate[row.timestamp];
+
+    if (row.production1D !== null) {
+      date.production += row.production1D;
+    }
+
+    // Ignore missing, zero and negative targets.
+    if (row.productionTarget > 0) {
+      date.target += row.productionTarget;
+    }
+  }
+
+  return Object.values(byDate).sort(
+    (a, b) => new Date(a.timestamp) - new Date(b.timestamp),
+  );
+}
+
+// Get production and target totals for each field.
+export function getFieldProduction(rows = parseRows()) {
+  const byField = {};
+
+  for (const row of rows) {
+    if (!byField[row.fieldName]) {
+      byField[row.fieldName] = {
+        fieldName: row.fieldName,
+        production: 0,
+        target: 0,
+      };
+    }
+
+    const field = byField[row.fieldName];
+
+    if (row.production1D !== null) {
+      field.production += row.production1D;
+    }
+
+    // Ignore missing, zero and negative targets.
+    if (row.productionTarget > 0) {
+      field.target += row.productionTarget;
+    }
+  }
+
+  return Object.values(byField).sort((a, b) => b.production - a.production);
+}
+
+// Calculate production performance for every well.
+export function getWellPerformance(rows = parseRows()) {
+  const byWell = {};
+
+  for (const row of rows) {
+    if (!byWell[row.wellName]) {
+      byWell[row.wellName] = {
+        wellName: row.wellName,
+        fieldName: row.fieldName,
+        production: 0,
+        target: 0,
+      };
+    }
+
+    const well = byWell[row.wellName];
+
+    if (row.production1D !== null) {
+      well.production += row.production1D;
+    }
+
+    // Only positive targets are used.
+    if (row.productionTarget > 0) {
+      well.target += row.productionTarget;
+    }
+  }
+
+  return Object.values(byWell)
+    .map((well) => ({
+      ...well,
+
+      achievement:
+        well.target > 0 ? (well.production / well.target) * 100 : null,
+    }))
+    .sort((a, b) => {
+      // Wells without a valid target go to the bottom.
+      if (a.achievement === null) return 1;
+      if (b.achievement === null) return -1;
+
+      return b.achievement - a.achievement;
+    });
+}

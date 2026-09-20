@@ -1,13 +1,28 @@
 import StatCard from "@/components/StatCard";
-
-const stats = [
-  { title: "Total Production", value: "—" },
-  { title: "Production Target", value: "—" },
-  { title: "Total Wells", value: "—" },
-  { title: "Avg Cycle Time", value: "—" },
-];
+import { getDashboardMetrics } from "@/lib/production";
 
 export default function DashboardPage() {
+  const metrics = getDashboardMetrics();
+
+  const stats = [
+    {
+      title: "Total Production",
+      value: metrics.totalProduction.toFixed(2),
+    },
+    {
+      title: "Production Target",
+      value: metrics.totalTarget.toFixed(2),
+    },
+    {
+      title: "Total Wells",
+      value: metrics.totalWells,
+    },
+    {
+      title: "Avg Cycle Time",
+      value: `${metrics.averageCycleTime.toFixed(2)} sec`,
+    },
+  ];
+
   return (
     <>
       <div className="mb-6">
