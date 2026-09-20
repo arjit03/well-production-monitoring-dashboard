@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+
 import { useAuth } from "@/context/AuthContext";
 import { navItems } from "@/config/navigation";
 
@@ -11,12 +12,12 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+
 import { Button } from "@/components/ui/button";
 
 export default function Sidebar() {
@@ -39,7 +40,6 @@ export default function Sidebar() {
       <SidebarHeader>
         <div className="px-2 py-2">
           <p className="font-semibold">Production Monitor</p>
-          {/* <p className="text-sm text-muted-foreground">Monitor</p> */}
         </div>
       </SidebarHeader>
 
@@ -49,11 +49,8 @@ export default function Sidebar() {
             <SidebarMenu>
               {visibleItems.map((item) => (
                 <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton
-                    render={<Link href={item.href} />}
-                    isActive={pathname === item.href}
-                  >
-                    {item.label}
+                  <SidebarMenuButton asChild isActive={pathname === item.href}>
+                    <Link href={item.href}>{item.label}</Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
