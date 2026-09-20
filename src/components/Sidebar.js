@@ -52,7 +52,8 @@ export default function Sidebar() {
               {visibleItems.map((item) => (
                 <SidebarMenuItem key={item.href}>
                   <SidebarMenuButton
-                    className="text-sm sm:text-base"
+                    asChild
+                    className="text-sm sm:text-base hover:bg-muted/50"
                     isActive={pathname === item.href}
                   >
                     <Link href={item.href}>{item.label}</Link>

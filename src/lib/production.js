@@ -41,11 +41,6 @@ export function parseRows() {
   }));
 }
 
-// Get all production records.
-export function getProductionData() {
-  return parseRows();
-}
-
 // Get the latest date in the dataset.
 function getLatestDate(rows) {
   return rows.reduce((latest, row) => {
@@ -93,36 +88,6 @@ export function getDashboardMetrics(rows = parseRows()) {
           validCycleTimes.length
         : 0,
   };
-}
-
-// Get production and target totals for each date.
-export function getProductionTrend(rows = parseRows()) {
-  const byDate = {};
-
-  for (const row of rows) {
-    if (!byDate[row.timestamp]) {
-      byDate[row.timestamp] = {
-        timestamp: row.timestamp,
-        production: 0,
-        target: 0,
-      };
-    }
-
-    const date = byDate[row.timestamp];
-
-    if (row.production1D !== null) {
-      date.production += row.production1D;
-    }
-
-    // Ignore missing, zero and negative targets.
-    if (row.productionTarget > 0) {
-      date.target += row.productionTarget;
-    }
-  }
-
-  return Object.values(byDate).sort(
-    (a, b) => new Date(a.timestamp) - new Date(b.timestamp),
-  );
 }
 
 // Only use records from the latest available date.
@@ -198,12 +163,45 @@ export function getWellPerformance(rows = parseRows()) {
     .filter((well) => well.achievement !== null)
     .sort((a, b) => b.achievement - a.achievement);
 }
+
 // Get production and target trends over time for a specific field.
 export function getFieldProductionTrend(fieldName, rows = parseRows()) {
   const byDate = {};
 
   for (const row of rows) {
     if (row.fieldName !== fieldName) {
+      continue;
+    }
+
+    if (!byDate[row.timestamp]) {
+      byDate[row.timestamp] = {
+        timestamp: row.timestamp,
+        production: 0,
+        target: 0,
+      };
+    }
+
+    if (row.production1D !== null) {
+      byDate[row.timestamp].production += row.production1D;
+    }
+
+    // Only positive targets are used.
+    if (row.productionTarget > 0) {
+      byDate[row.timestamp].target += row.productionTarget;
+    }
+  }
+
+  return Object.values(byDate).sort(
+    (a, b) => new Date(a.timestamp) - new Date(b.timestamp),
+  );
+}
+
+// Get production and target trends over time for a specific well.
+export function getWellProductionTrend(wellName, rows = parseRows()) {
+  const byDate = {};
+
+  for (const row of rows) {
+    if (row.wellName !== wellName) {
       continue;
     }
 

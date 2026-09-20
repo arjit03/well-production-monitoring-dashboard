@@ -22,7 +22,7 @@ export default function FieldProductionTrend({ fields, trends }) {
         <p className="text-sm font-medium sm:text-base">Field</p>
 
         <Select value={selectedField} onValueChange={setSelectedField}>
-          <SelectTrigger className="w-[140px]">
+          <SelectTrigger className="w-[120px] text-sm sm:text-base">
             <SelectValue placeholder="Select field" />
           </SelectTrigger>
 
@@ -36,7 +36,7 @@ export default function FieldProductionTrend({ fields, trends }) {
         </Select>
       </div>
 
-      <ProductionTrendChart data={data} title="Field Production Trend" />
+      <ProductionTrendChart data={data} />
     </div>
   );
 }

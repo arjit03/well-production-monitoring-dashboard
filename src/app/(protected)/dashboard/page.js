@@ -60,9 +60,8 @@ export default function DashboardPage() {
     <>
       <div className="mb-6">
         <h2 className="text-xl font-bold sm:text-2xl">Dashboard</h2>
-
         <p className="text-sm text-muted-foreground sm:text-base">
-          Monitor well production and performance.
+          Overview of well production and performance.
         </p>
       </div>
 
