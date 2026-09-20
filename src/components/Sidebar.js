@@ -1,44 +1,81 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import { navItems } from "@/config/navigation";
 
-const navItems = [
-  {
-    label: "Dashboard",
-    href: "/dashboard",
-    roles: ["admin", "analyst", "viewer"],
-  },
-  {
-    label: "Wells",
-    href: "/wells",
-    roles: ["admin", "analyst", "viewer"],
-  },
-  {
-    label: "Tasks",
-    href: "/tasks",
-    roles: ["admin", "analyst", "viewer"],
-  },
-  {
-    label: "Users",
-    href: "/users",
-    roles: ["admin"],
-  },
-];
+import {
+  Sidebar as SidebarPrimitive,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
 
-export default function Sidebar({ role }) {
-  const visibleItems = navItems.filter((item) => item.roles.includes(role));
+export default function Sidebar() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const { currentUser, setCurrentUser } = useAuth();
+
+  const visibleItems = navItems.filter((item) =>
+    item.roles.includes(currentUser?.role),
+  );
+
+  function handleLogout() {
+    localStorage.removeItem("currentUser");
+    setCurrentUser(null);
+    router.replace("/login");
+  }
 
   return (
-    <aside className="hidden w-64 shrink-0 border-r border-border md:block">
-      <nav className="space-y-1 p-4">
-        {visibleItems.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground"
+    <SidebarPrimitive>
+      <SidebarHeader>
+        <div className="px-2 py-2">
+          <p className="font-semibold">Production Monitor</p>
+          {/* <p className="text-sm text-muted-foreground">Monitor</p> */}
+        </div>
+      </SidebarHeader>
+
+      <SidebarContent className="py-6">
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {visibleItems.map((item) => (
+                <SidebarMenuItem key={item.href}>
+                  <SidebarMenuButton
+                    render={<Link href={item.href} />}
+                    isActive={pathname === item.href}
+                  >
+                    {item.label}
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+
+      <SidebarFooter>
+        <div className="flex w-full items-center justify-between gap-2 px-2 py-2">
+          <p className="truncate text-sm font-medium">{currentUser?.name}</p>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleLogout}
+            className="shrink-0"
           >
-            {item.label}
-          </Link>
-        ))}
-      </nav>
-    </aside>
+            Logout
+          </Button>
+        </div>
+      </SidebarFooter>
+    </SidebarPrimitive>
   );
 }

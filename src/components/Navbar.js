@@ -1,36 +1,14 @@
-"use client";
-
-import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function Navbar() {
-  const { currentUser, setCurrentUser } = useAuth();
-  const router = useRouter();
-
-  function handleLogout() {
-    localStorage.removeItem("currentUser");
-    setCurrentUser(null);
-    router.replace("/login");
-  }
-
   return (
-    <header className="border-b border-border px-6 py-4">
-      <div className="flex items-center justify-between gap-4">
-        <h1 className="text-xl font-semibold">Well Production Monitor</h1>
+    <header className="border-b border-border px-4 py-4 sm:px-6">
+      <div className="flex items-center gap-3">
+        <SidebarTrigger />
 
-        <div className="flex items-center gap-4">
-          <div className="hidden text-right sm:block">
-            <p className="text-sm font-medium">{currentUser?.name}</p>
-            <p className="text-xs capitalize text-muted-foreground">
-              {currentUser?.role}
-            </p>
-          </div>
-
-          <Button variant="outline" onClick={handleLogout}>
-            Logout
-          </Button>
-        </div>
+        <h1 className="text-lg font-semibold sm:text-xl">
+          Well Production Monitor
+        </h1>
       </div>
     </header>
   );

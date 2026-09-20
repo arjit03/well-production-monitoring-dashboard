@@ -1,24 +1,20 @@
-"use client";
-
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
-import { useAuth } from "@/context/AuthContext";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 
 export default function ProtectedLayout({ children }) {
-  const { currentUser } = useAuth();
-
   return (
     <ProtectedRoute>
-      <div className="min-h-screen">
-        <Navbar />
+      <SidebarProvider>
+        <Sidebar />
 
-        <div className="flex">
-          <Sidebar role={currentUser?.role} />
+        <SidebarInset>
+          <Navbar />
 
-          <main className="flex-1 p-6">{children}</main>
-        </div>
-      </div>
+          <main className="min-w-0 flex-1 p-4 sm:p-6">{children}</main>
+        </SidebarInset>
+      </SidebarProvider>
     </ProtectedRoute>
   );
 }
