@@ -15,41 +15,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-const demoUsers = [
-  {
-    id: 1,
-    name: "Admin-1",
-    email: "admin@example.com",
-    password: "admin123",
-    role: "admin",
-  },
-  {
-    id: 2,
-    name: "Analyst-1",
-    email: "analyst@example.com",
-    password: "analyst123",
-    role: "analyst",
-  },
-  {
-    id: 3,
-    name: "Viewer-1",
-    email: "viewer@example.com",
-    password: "viewer123",
-    role: "viewer",
-  },
-];
-
 export default function LoginPage() {
   const router = useRouter();
-
-  const { currentUser, loading, setCurrentUser } = useAuth();
+  const { currentUser, loading, setCurrentUser, users } = useAuth();
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
   });
-
   const [credentialsError, setCredentialsError] = useState({
     emailError: "",
     passwordError: "",
@@ -63,6 +38,7 @@ export default function LoginPage() {
   }, [loading, currentUser, router]);
 
   function handleCredentials(e) {
+    setError("");
     if (e.target.name === "email") {
       setCredentialsError((prev) => {
         return { ...prev, emailError: "" };
@@ -80,6 +56,7 @@ export default function LoginPage() {
 
   function handleLogin(event) {
     event.preventDefault();
+
     setError("");
 
     if (!credentials.email && !credentials.password) {
@@ -111,7 +88,7 @@ export default function LoginPage() {
       }));
     }
 
-    const user = demoUsers.find(
+    const user = users.find(
       (user) =>
         user.email === credentials.email &&
         user.password === credentials.password,
@@ -130,7 +107,9 @@ export default function LoginPage() {
     };
 
     localStorage.setItem("currentUser", JSON.stringify(loggedInUser));
+
     setCurrentUser(loggedInUser);
+
     router.replace("/dashboard");
   }
 
