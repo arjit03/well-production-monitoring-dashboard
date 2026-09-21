@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function WellPerformanceCard({ title, wells, emptyMessage }) {
   return (
-    <Card>
+    <Card className="border">
       <CardHeader className="border-b">
         <CardTitle className="text-lg sm:text-xl">{title}</CardTitle>
       </CardHeader>

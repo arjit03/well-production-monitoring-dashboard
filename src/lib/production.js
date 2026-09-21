@@ -227,3 +227,25 @@ export function getWellProductionTrend(wellName, rows = parseRows()) {
     (a, b) => new Date(a.timestamp) - new Date(b.timestamp),
   );
 }
+
+// Get the latest production data for every well.
+export function getWellTableData(rows = parseRows()) {
+  const latestDate = getLatestDate(rows);
+
+  return rows
+    .filter((row) => row.timestamp === latestDate)
+    .map((row) => ({
+      wellName: row.wellName,
+      fieldName: row.fieldName,
+      production1D: row.production1D,
+      production7D: row.production7D,
+      productionTarget: row.productionTarget,
+      averageCycleTime: row.averageCycleTime,
+      averageCycleTimeMinutes:
+        row.averageCycleTime !== null ? row.averageCycleTime / 60 : null,
+      achievement:
+        row.productionTarget > 0 && row.production1D !== null
+          ? (row.production1D / row.productionTarget) * 100
+          : null,
+    }));
+}

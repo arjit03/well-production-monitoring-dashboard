@@ -73,9 +73,7 @@ export default function DashboardPage() {
 
       <FieldProductionTrend fields={fields} trends={fieldTrends} />
 
-      <div className="mt-6 min-w-0 overflow-hidden rounded-lg border bg-card p-4">
-        <FieldProductionChart data={fieldProduction} />
-      </div>
+      <FieldProductionChart data={fieldProduction} />
 
       <div className="mt-6 mb-2">
         <WellPerformance data={wellPerformance} />

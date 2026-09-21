@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function FieldProductionTrend({ fields, trends }) {
   const [selectedField, setSelectedField] = useState(fields[0] ?? "");
@@ -17,26 +18,28 @@ export default function FieldProductionTrend({ fields, trends }) {
   const data = trends[selectedField] ?? [];
 
   return (
-    <div className="mt-6 min-w-0 overflow-hidden rounded-lg border bg-card p-4">
-      <div className="mb-4 flex items-center justify-start gap-4">
-        <p className="text-sm font-medium sm:text-base">Field</p>
+    <Card className="mt-6 min-w-0 border overflow-hidden">
+      <CardContent className="p-4">
+        <div className="mb-4 flex flex-row items-center gap-4">
+          <p className="text-sm font-medium sm:text-base">Field</p>
 
-        <Select value={selectedField} onValueChange={setSelectedField}>
-          <SelectTrigger className="w-[120px] text-sm sm:text-base">
-            <SelectValue placeholder="Select field" />
-          </SelectTrigger>
+          <Select value={selectedField} onValueChange={setSelectedField}>
+            <SelectTrigger className="w-[120px] text-sm sm:text-base">
+              <SelectValue placeholder="Select field" />
+            </SelectTrigger>
 
-          <SelectContent>
-            {fields.map((field) => (
-              <SelectItem key={field} value={field}>
-                {field}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+            <SelectContent>
+              {fields.map((field) => (
+                <SelectItem key={field} value={field}>
+                  {field}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-      <ProductionTrendChart data={data} />
-    </div>
+        <ProductionTrendChart data={data} />
+      </CardContent>
+    </Card>
   );
 }

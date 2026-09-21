@@ -1,5 +1,11 @@
-import { getWellProductionTrend, parseRows } from "@/lib/production";
+import {
+  getWellProductionTrend,
+  getWellTableData,
+  parseRows,
+} from "@/lib/production";
+
 import WellProductionTrend from "@/components/WellProductionTrend";
+import WellsGrid from "@/components/WellsGrid";
 
 export default function WellsPage() {
   const rows = parseRows();
@@ -12,6 +18,8 @@ export default function WellsPage() {
     wells.map((well) => [well, getWellProductionTrend(well, rows)]),
   );
 
+  const wellTableData = getWellTableData(rows);
+
   return (
     <>
       <div className="mb-6">
@@ -22,6 +30,8 @@ export default function WellsPage() {
       </div>
 
       <WellProductionTrend wells={wells} trends={wellTrends} />
+
+      <WellsGrid data={wellTableData} />
     </>
   );
 }
