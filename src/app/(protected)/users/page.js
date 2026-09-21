@@ -412,11 +412,11 @@ export default function UsersPage() {
               <TableBody>
                 {users.map((user) => (
                   <TableRow key={user.id}>
-                    <TableCell className="border-r text-center">
+                    <TableCell className="border-r text-center whitespace-normal break-all">
                       {user.name}
                     </TableCell>
 
-                    <TableCell className="border-r whitespace-nowrap text-center">
+                    <TableCell className="border-r text-center whitespace-normal break-all">
                       {user.email}
                     </TableCell>
 
@@ -527,7 +527,7 @@ export default function UsersPage() {
 
             <AlertDialogDescription>
               Are you sure you want to delete{" "}
-              <span className="font-medium text-foreground">
+              <span className="font-medium text-foreground break-all">
                 {userToDelete?.name}
               </span>
               ? This action cannot be undone.

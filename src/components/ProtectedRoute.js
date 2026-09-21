@@ -8,7 +8,7 @@ import { Spinner } from "@/components/ui/spinner";
 const routeRoles = {
   "/dashboard": ["admin", "analyst", "viewer"],
   "/wells": ["admin", "analyst", "viewer"],
-  "/tasks": ["admin", "analyst"],
+  "/tasks": ["admin", "analyst", "viewer"],
   "/users": ["admin"],
 };
 
