@@ -10,6 +10,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  SelectGroup,
 } from "@/components/ui/select";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -28,12 +29,14 @@ export default function WellProductionTrend({ wells, trends }) {
             <SelectValue placeholder="Select well" />
           </SelectTrigger>
 
-          <SelectContent className="!max-h-60">
-            {wells.map((well) => (
-              <SelectItem key={well} value={well}>
-                {well}
-              </SelectItem>
-            ))}
+          <SelectContent>
+            <SelectGroup className="max-h-60 overflow-y-auto scrollbar-hide">
+              {wells.map((well) => (
+                <SelectItem key={well} value={well}>
+                  {well}
+                </SelectItem>
+              ))}
+            </SelectGroup>
           </SelectContent>
         </Select>
       </div>
