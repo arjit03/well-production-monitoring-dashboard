@@ -45,7 +45,6 @@ export default function WellProductionTrend({ wells, trends }) {
           <ProductionTrendChart data={data} />
         </CardContent>
       </Card>
-      ☻
     </>
   );
 }
