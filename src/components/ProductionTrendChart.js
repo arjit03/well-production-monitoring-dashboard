@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-
 import * as echarts from "echarts";
-
 import { Spinner } from "@/components/ui/spinner";
 
 export default function ProductionTrendChart({ data }) {
@@ -222,7 +220,7 @@ export default function ProductionTrendChart({ data }) {
 
   return (
     <div className="mb-4 w-full min-w-0">
-      <div className="mb-4 text-center">
+      <div className="mb-6 text-center">
         <h3 className="text-lg font-semibold sm:text-xl">
           Production vs Target
         </h3>

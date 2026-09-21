@@ -4,8 +4,8 @@ import {
   parseRows,
 } from "@/lib/production";
 
-import WellProductionTrend from "@/components/WellProductionTrend";
-import WellsGrid from "@/components/WellsGrid";
+import WellProductionTrend from "@/components/wells/WellProductionTrend";
+import WellsGrid from "@/components/wells/WellsGrid";
 import PageHeader from "@/components/PageHeader";
 
 export default function WellsPage() {

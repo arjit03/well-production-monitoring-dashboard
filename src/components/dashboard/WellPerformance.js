@@ -1,4 +1,4 @@
-import WellPerformanceCard from "@/components/WellPerformanceCard";
+import WellPerformanceCard from "@/components/dashboard/WellPerformanceCard";
 
 export default function WellPerformance({ data }) {
   const topWells = data.filter((well) => well.achievement !== null).slice(0, 5);

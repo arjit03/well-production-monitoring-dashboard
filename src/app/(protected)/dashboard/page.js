@@ -1,7 +1,7 @@
-import StatCard from "@/components/StatCard";
-import WellPerformance from "@/components/WellPerformance";
-import FieldProductionTrend from "@/components/FieldProductionTrend";
-import FieldProductionChart from "@/components/FieldProductionChart";
+import StatCard from "@/components/dashboard/StatCard";
+import WellPerformance from "@/components/dashboard/WellPerformance";
+import FieldProductionTrend from "@/components/dashboard/FieldProductionTrend";
+import FieldProductionChart from "@/components/dashboard/FieldProductionChart";
 import PageHeader from "@/components/PageHeader";
 
 import {
