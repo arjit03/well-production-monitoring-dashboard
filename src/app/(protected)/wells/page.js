@@ -6,6 +6,7 @@ import {
 
 import WellProductionTrend from "@/components/WellProductionTrend";
 import WellsGrid from "@/components/WellsGrid";
+import PageHeader from "@/components/PageHeader";
 
 export default function WellsPage() {
   const rows = parseRows();
@@ -22,12 +23,10 @@ export default function WellsPage() {
 
   return (
     <>
-      <div className="mb-6">
-        <h2 className="text-xl font-bold sm:text-2xl">Wells</h2>
-        <p className="text-sm text-muted-foreground sm:text-base">
-          Monitor individual well production and performance.
-        </p>
-      </div>
+      <PageHeader
+        title="Wells"
+        description="Monitor individual well production and performance."
+      />
 
       <WellProductionTrend wells={wells} trends={wellTrends} />
 

@@ -2,6 +2,7 @@ import StatCard from "@/components/StatCard";
 import WellPerformance from "@/components/WellPerformance";
 import FieldProductionTrend from "@/components/FieldProductionTrend";
 import FieldProductionChart from "@/components/FieldProductionChart";
+import PageHeader from "@/components/PageHeader";
 
 import {
   getDashboardMetrics,
@@ -58,12 +59,10 @@ export default function DashboardPage() {
 
   return (
     <>
-      <div className="mb-6">
-        <h2 className="text-xl font-bold sm:text-2xl">Dashboard</h2>
-        <p className="text-sm text-muted-foreground sm:text-base">
-          Overview of well production and performance.
-        </p>
-      </div>
+      <PageHeader
+        title="Dashboard"
+        description="Overview of well production and performance."
+      />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
