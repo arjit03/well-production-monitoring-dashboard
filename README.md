@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Well Production Monitoring Dashboard
 
-## Getting Started
+## Overview
 
-First, run the development server:
+A multi-page analytics dashboard for oil & gas well production data.
+
+The application provides:
+
+- Production trends at field and well level
+- Actual production vs production target
+- Top-performing and underperforming wells
+- Well-level production data with sorting, filtering and pagination
+- User management with role-based access control (RBAC)
+- Task creation, assignment and tracking
+- Responsive layouts for mobile, tablet, desktop and large screens
+- Loading, error and empty states where applicable
+
+## Pages
+
+- `/login` — Demo sign-in
+- `/dashboard` — Field production overview, production trends, actual vs target comparison, and well performance
+- `/wells` — Well production trends and tabular well data
+- `/tasks` — Task management and assignment
+- `/users` — User and role management (admin only)
+
+## Role-Based Access
+
+| Role    | Access                                                                   |
+| ------- | ------------------------------------------------------------------------ |
+| Admin   | Dashboard, Wells, Tasks, Users; can manage users and tasks               |
+| Analyst | Dashboard, Wells, Tasks; can manage tasks                                |
+| Viewer  | Dashboard, Wells, Tasks; can view assigned tasks and update their status |
+
+## Demo Credentials
+
+| Role    | Email                 | Password     |
+| ------- | --------------------- | ------------ |
+| Admin   | `admin@example.com`   | `admin123`   |
+| Analyst | `analyst@example.com` | `analyst123` |
+| Viewer  | `viewer@example.com`  | `viewer123`  |
+
+## Tech Stack
+
+- Next.js 16.3.5 — React, App Router, JavaScript
+- Tailwind CSS
+- shadcn/ui with Radix primitives
+- ECharts — production/target trends over time
+- Highcharts — field-level production vs target comparison
+- AG Grid — well production data table
+- PapaParse — CSV parsing
+
+## Data
+
+The dashboard uses `src/data/frontend_sample_data.csv` provided with the assignment.
+
+The application:
+
+- Reads and parses the CSV data
+- Handles missing or invalid numeric values as unavailable data
+- Uses the latest available timestamp for dashboard KPIs and current well/field performance
+- Aggregates production and target values by field and well
+- Calculates production achievement against target
+
+## Local Setup
+
+### Requirements
+
+- Node.js 22.20.0
+- npm
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+### Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Production build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## Docker
 
-To learn more about Next.js, take a look at the following resources:
+### Build the image
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+docker build -t well-production-monitoring-dashboard .
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Run the container
 
-## Deploy on Vercel
+```bash
+docker run --rm -p 3000:3000 well-production-monitoring-dashboard
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Open `http://localhost:3000`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The Docker image uses the Next.js standalone build and includes the CSV dataset required at runtime.
+
+## Assumptions
+
+- This is a frontend-only implementation. Authentication, user management and task management use demo data and browser `localStorage`; there is no backend or database.
+- The supplied CSV is the source of truth for production data.
+- For dashboard KPIs and current performance views, the latest timestamp available in the dataset is used.
+- Production targets with missing, zero, or negative values are excluded from target-based calculations and achievement percentages.
+- The provided dataset contains oil production measurements and does not include separate gas production data. Gas-specific analytics are therefore not included in the dashboard.

@@ -16,7 +16,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
+import { SheetClose } from "@/components/ui/sheet";
 
 import { Button } from "@/components/ui/button";
 
@@ -24,6 +26,7 @@ export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const { currentUser, setCurrentUser } = useAuth();
+  const { isMobile } = useSidebar();
 
   const visibleItems = navItems.filter((item) =>
     item.roles.includes(currentUser?.role),
@@ -56,7 +59,13 @@ export default function Sidebar() {
                     className="text-sm sm:text-base hover:bg-muted/50"
                     isActive={pathname === item.href}
                   >
-                    <Link href={item.href}>{item.label}</Link>
+                    {isMobile ? (
+                      <SheetClose asChild>
+                        <Link href={item.href}>{item.label}</Link>
+                      </SheetClose>
+                    ) : (
+                      <Link href={item.href}>{item.label}</Link>
+                    )}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

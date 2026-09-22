@@ -12,7 +12,7 @@ import {
   SelectValue,
   SelectGroup,
 } from "@/components/ui/select";
-
+import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function WellProductionTrend({ wells, trends }) {
@@ -22,10 +22,12 @@ export default function WellProductionTrend({ wells, trends }) {
   return (
     <>
       <div className="mb-6 flex flex-row items-center gap-4">
-        <p className="text-sm font-medium sm:text-base">Well</p>
+        <Label htmlFor="well" className="text-sm font-medium sm:text-base">
+          Well
+        </Label>
 
         <Select value={selectedWell} onValueChange={setSelectedWell}>
-          <SelectTrigger className="w-[140px] text-sm sm:text-base">
+          <SelectTrigger id="well" className="w-[140px] text-sm sm:text-base">
             <SelectValue placeholder="Select well" />
           </SelectTrigger>
 

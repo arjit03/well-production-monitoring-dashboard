@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function FieldProductionTrend({ fields, trends }) {
@@ -20,10 +21,12 @@ export default function FieldProductionTrend({ fields, trends }) {
   return (
     <>
       <div className="mb-4 mt-6 flex flex-row items-center gap-4">
-        <p className="text-sm font-medium sm:text-base">Field</p>
+        <Label htmlFor="field" className="text-sm font-medium sm:text-base">
+          Field
+        </Label>
 
         <Select value={selectedField} onValueChange={setSelectedField}>
-          <SelectTrigger className="w-[120px] text-sm sm:text-base">
+          <SelectTrigger id="field" className="w-[120px] text-sm sm:text-base">
             <SelectValue placeholder="Select field" />
           </SelectTrigger>
 

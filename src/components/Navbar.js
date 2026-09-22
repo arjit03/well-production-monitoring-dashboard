@@ -1,4 +1,5 @@
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import Link from "next/link";
 
 export default function Navbar() {
   return (
@@ -6,9 +7,12 @@ export default function Navbar() {
       <div className="flex items-center gap-3">
         <SidebarTrigger />
 
-        <h1 className="text-lg font-semibold sm:text-xl">
+        <Link
+          href="/dashboard"
+          className="text-lg font-semibold sm:text-xl hover:opacity-80 transition-opacity"
+        >
           Well Production Monitor
-        </h1>
+        </Link>
       </div>
     </header>
   );
