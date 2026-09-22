@@ -75,15 +75,16 @@ The application:
 
 ### Clone the repository
 
-````bash
+```bash
 git clone https://github.com/arjit03/well-production-monitoring-dashboard.git
 cd well-production-monitoring-dashboard
+```
 
 ### Install dependencies
 
 ```bash
 npm install
-````
+```
 
 ### Run the development server
 
