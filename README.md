@@ -15,6 +15,11 @@ The application provides:
 - Responsive layouts for mobile, tablet, desktop and large screens
 - Loading, error and empty states where applicable
 
+## Links
+
+- [Live Demo](https://well-dashboard.onrender.com/)
+- [GitHub Repository](https://github.com/arjit03/well-production-monitoring-dashboard)
+
 ## Pages
 
 - `/login` — Demo sign-in

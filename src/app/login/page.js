@@ -127,7 +127,7 @@ export default function LoginPage() {
         Well Production Monitor
       </h1>
 
-      <Card className="w-full max-w-xl py-6">
+      <Card className="w-full max-w-xl py-6 border">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl sm:text-3xl">Welcome back</CardTitle>
 
