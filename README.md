@@ -73,11 +73,17 @@ The application:
 - Node.js 22.20.0
 - npm
 
+### Clone the repository
+
+````bash
+git clone https://github.com/arjit03/well-production-monitoring-dashboard.git
+cd well-production-monitoring-dashboard
+
 ### Install dependencies
 
 ```bash
 npm install
-```
+````
 
 ### Run the development server
 
